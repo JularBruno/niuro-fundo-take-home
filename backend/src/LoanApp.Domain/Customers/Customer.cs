@@ -32,11 +32,13 @@ public sealed class Customer
     }
 
     /// <summary>Creates the customer's application, or updates it if one already exists.</summary>
-    public void Apply(decimal requestedAmount)
+    public LoanApplication Apply(decimal requestedAmount)
     {
         if (Application is null)
             Application = new LoanApplication(Id, requestedAmount);
         else
             Application.UpdateRequestedAmount(requestedAmount);
+
+        return Application;
     }
 }

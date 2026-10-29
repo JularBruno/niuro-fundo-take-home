@@ -1,5 +1,6 @@
 using LoanApp.Application.Decisions;
 using LoanApp.Application.Decisions.Rules;
+using LoanApp.Application.LoanApplications;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LoanApp.Application;
@@ -12,6 +13,7 @@ public static class DependencyInjection
         services.AddScoped<IDenyRule, UnsupportedStateRule>();
         services.AddScoped<IDenyRule, BlacklistedSsnRule>();
         services.AddScoped<LoanDecisionEngine>();
+        services.AddScoped<SubmitLoanApplicationHandler>();
 
         return services;
     }
