@@ -20,6 +20,17 @@ function formatAmount(value: string) {
   return value && Number.isFinite(amount) ? amount.toLocaleString("en-US", { maximumFractionDigits: 2 }) : value;
 }
 
+function SectionTitle({ step, children }: { step: number; children: string }) {
+  return (
+    <legend className="mb-2 flex items-center gap-3 text-lg font-bold text-emerald-900">
+      <span className="flex size-7 items-center justify-center rounded-full bg-emerald-700 text-sm font-bold text-white" aria-hidden>
+        {step}
+      </span>
+      {children}
+    </legend>
+  );
+}
+
 export function ApplicationForm() {
   const [state, formAction, pending] = useActionState(submitApplicationAction, initialState);
   const { values, errors } = state;
@@ -39,7 +50,7 @@ export function ApplicationForm() {
       )}
 
       <fieldset className="space-y-4">
-        <legend className="mb-2 text-base font-semibold text-slate-900">About you</legend>
+        <SectionTitle step={1}>About you</SectionTitle>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field id="firstName" label="First name" error={errors.firstName}>
             {(props) => <input {...props} className={inputClass} autoComplete="given-name" defaultValue={values.firstName} />}
@@ -64,8 +75,8 @@ export function ApplicationForm() {
         </Field>
       </fieldset>
 
-      <fieldset className="space-y-4">
-        <legend className="mb-2 text-base font-semibold text-slate-900">Address</legend>
+      <fieldset className="space-y-4 border-t border-emerald-100 pt-8">
+        <SectionTitle step={2}>Address</SectionTitle>
         <Field id="street" label="Street address" error={errors.street}>
           {(props) => <input {...props} className={inputClass} autoComplete="street-address" defaultValue={values.street} />}
         </Field>
@@ -76,7 +87,7 @@ export function ApplicationForm() {
           <Field id="state" label="State" error={errors.state}>
             {(props) => (
               // key: React won't re-apply defaultValue to a <select> after a failed submit without a remount
-              <select {...props} key={values.state} className={inputClass} autoComplete="address-level1" defaultValue={values.state}>
+              <select key={values.state} {...props} className={inputClass} autoComplete="address-level1" defaultValue={values.state}>
                 <option value="" disabled>
                   Select…
                 </option>
@@ -96,8 +107,8 @@ export function ApplicationForm() {
         </div>
       </fieldset>
 
-      <fieldset className="space-y-4">
-        <legend className="mb-2 text-base font-semibold text-slate-900">Your loan</legend>
+      <fieldset className="space-y-4 border-t border-emerald-100 pt-8">
+        <SectionTitle step={3}>Your loan</SectionTitle>
         <Field id="companyName" label="Company name" error={errors.companyName}>
           {(props) => <input {...props} className={inputClass} autoComplete="organization" defaultValue={values.companyName} />}
         </Field>
@@ -121,7 +132,7 @@ export function ApplicationForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-blue-700 px-4 py-3 font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+        className="w-full rounded-lg bg-emerald-700 px-6 py-3 font-semibold text-white shadow-sm hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-wait disabled:opacity-70 sm:w-auto"
       >
         {pending ? "Submitting…" : "Submit application"}
       </button>

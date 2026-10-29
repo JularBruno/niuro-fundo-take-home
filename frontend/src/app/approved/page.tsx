@@ -26,10 +26,10 @@ async function ApprovedDetails({ searchParams }: Pick<PageProps<"/approved">, "s
 
   return (
     <>
-      <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-green-100 text-2xl text-green-700" aria-hidden>
+      <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-emerald-100 text-2xl font-bold text-emerald-700" aria-hidden>
         ✓
       </div>
-      <h1 className="text-2xl font-semibold tracking-tight">
+      <h1 className="text-3xl font-bold tracking-tight text-emerald-900">
         {isReturning ? "Your application was updated" : "Your application is approved"}
       </h1>
       <p className="mt-2 text-slate-600">
@@ -37,15 +37,15 @@ async function ApprovedDetails({ searchParams }: Pick<PageProps<"/approved">, "s
           ? "We found your existing application and updated it with the details you just sent."
           : "Good news — your business loan application has been approved."}
       </p>
-      <dl className="mt-6 grid gap-4 rounded-lg bg-slate-50 p-4 sm:grid-cols-2">
+      <dl className="mt-6 grid gap-4 rounded-lg border border-emerald-100 bg-emerald-50 p-4 sm:grid-cols-2">
         <div>
           <dt className="text-sm text-slate-500">Requested amount</dt>
-          <dd className="text-lg font-semibold">{formattedAmount}</dd>
+          <dd className="text-lg font-semibold text-emerald-900">{formattedAmount}</dd>
         </div>
         {reference && (
           <div>
             <dt className="text-sm text-slate-500">Reference</dt>
-            <dd className="font-mono text-lg font-semibold">{reference}</dd>
+            <dd className="font-mono text-lg font-semibold text-emerald-900">{reference}</dd>
           </div>
         )}
       </dl>

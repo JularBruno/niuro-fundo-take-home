@@ -33,5 +33,5 @@ export function Field({ id, label, error, hint, className = "", children }: Fiel
 
 export const inputClass =
   "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none " +
-  "placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 " +
+  "placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 " +
   "aria-invalid:border-red-600 aria-invalid:focus:ring-red-600/20";

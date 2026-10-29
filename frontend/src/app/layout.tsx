@@ -22,11 +22,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        <header className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex max-w-2xl items-center px-4 py-4">
-            <Link href="/" className="text-lg font-semibold tracking-tight text-blue-800">
+        <header className="bg-emerald-800 text-white shadow-md">
+          <div className="mx-auto flex max-w-2xl items-center justify-between gap-4 px-4 py-4">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-xl font-bold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            >
+              <span className="flex size-8 items-center justify-center rounded-lg bg-white text-base font-extrabold text-emerald-800" aria-hidden>
+                $
+              </span>
               Business Loans
             </Link>
+            <span className="hidden text-sm text-emerald-100 sm:block">Fast decisions for small businesses</span>
           </div>
         </header>
         <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:py-12">{children}</main>

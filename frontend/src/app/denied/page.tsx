@@ -39,7 +39,7 @@ async function DeniedDetails({ searchParams }: Pick<PageProps<"/denied">, "searc
       <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-slate-100 text-2xl text-slate-600" aria-hidden>
         ✕
       </div>
-      <h1 className="text-2xl font-semibold tracking-tight">{message.title}</h1>
+      <h1 className="text-3xl font-bold tracking-tight text-slate-900">{message.title}</h1>
       <p className="mt-2 text-slate-600">{message.body}</p>
     </>
   );
