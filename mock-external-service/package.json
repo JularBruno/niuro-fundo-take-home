@@ -1,0 +1,12 @@
+{
+  "name": "mock-external-service",
+  "private": true,
+  "type": "module",
+  "description": "Stand-in for the external system that receives customers and applications from the loan API.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
