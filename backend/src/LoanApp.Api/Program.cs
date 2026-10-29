@@ -1,17 +1,27 @@
+using System.Text.Json.Serialization;
+using LoanApp.Api.ErrorHandling;
 using LoanApp.Application;
 using LoanApp.Infrastructure;
 using LoanApp.Infrastructure.Persistence;
-using Scalar.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<DomainExceptionHandler>();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseExceptionHandler(); // unhandled errors → 500 ProblemDetails, no internals leaked
 
 if (app.Environment.IsDevelopment())
 {
