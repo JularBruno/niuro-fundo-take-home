@@ -1,6 +1,8 @@
+using LoanApp.Application.Abstractions;
 using LoanApp.Application.Decisions;
 using LoanApp.Infrastructure.Blacklist;
 using LoanApp.Infrastructure.Persistence;
+using LoanApp.Infrastructure.Persistence.Outbox;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,9 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("Database")));
+        services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<AppDbContext>());
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IEventPublisher, OutboxEventPublisher>();
 
         var blacklistedSsns = configuration.GetSection("Blacklist:Ssns").GetChildren().Select(entry => entry.Value!);
         services.AddSingleton<ISsnBlacklist>(new ConfiguredSsnBlacklist(blacklistedSsns));

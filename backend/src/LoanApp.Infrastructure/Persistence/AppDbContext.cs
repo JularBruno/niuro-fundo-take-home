@@ -1,11 +1,19 @@
+using LoanApp.Application.Abstractions;
 using LoanApp.Domain.Customers;
+using LoanApp.Infrastructure.Persistence.Outbox;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoanApp.Infrastructure.Persistence;
 
-public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+/// <summary>
+/// Also the unit of work: one SaveChanges writes customer, application and outbox rows in a single transaction.
+/// </summary>
+public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IUnitOfWork
 {
     public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+
+    Task IUnitOfWork.SaveChangesAsync(CancellationToken cancellationToken) => SaveChangesAsync(cancellationToken);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,6 +43,15 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             application.HasKey(a => a.Id);
             application.Property(a => a.Id).ValueGeneratedNever();
             application.Property(a => a.RequestedAmount).HasPrecision(18, 2);
+        });
+
+        modelBuilder.Entity<OutboxMessage>(message =>
+        {
+            message.HasKey(m => m.Id);
+            message.Property(m => m.Type).HasMaxLength(200);
+            message.Property(m => m.Payload).HasColumnType("jsonb");
+            // The processor only ever reads pending messages, oldest first.
+            message.HasIndex(m => m.OccurredAt).HasFilter("\"ProcessedAt\" IS NULL");
         });
     }
 }
