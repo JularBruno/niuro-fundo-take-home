@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddScoped<IDenyRule, BlacklistedSsnRule>();
         services.AddScoped<LoanDecisionEngine>();
         services.AddScoped<SubmitLoanApplicationHandler>();
+        services.AddScoped<LoanApplicationSubmittedHandler>();
 
         return services;
     }
