@@ -22,31 +22,9 @@ namespace LoanApp.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("LoanApp.Domain.Applications.LoanApplication", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal>("RequestedAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
-                    b.ToTable("Applications");
-                });
-
             modelBuilder.Entity("LoanApp.Domain.Customers.Customer", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("CompanyName")
@@ -63,8 +41,8 @@ namespace LoanApp.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Ssn")
                         .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("character varying(11)");
+                        .HasMaxLength(9)
+                        .HasColumnType("character varying(9)");
 
                     b.HasKey("Id");
 
@@ -74,13 +52,24 @@ namespace LoanApp.Infrastructure.Persistence.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("LoanApp.Domain.Applications.LoanApplication", b =>
+            modelBuilder.Entity("LoanApp.Domain.Customers.LoanApplication", b =>
                 {
-                    b.HasOne("LoanApp.Domain.Customers.Customer", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("RequestedAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.ToTable("Applications", (string)null);
                 });
 
             modelBuilder.Entity("LoanApp.Domain.Customers.Customer", b =>
@@ -117,6 +106,20 @@ namespace LoanApp.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LoanApp.Domain.Customers.LoanApplication", b =>
+                {
+                    b.HasOne("LoanApp.Domain.Customers.Customer", null)
+                        .WithOne("Application")
+                        .HasForeignKey("LoanApp.Domain.Customers.LoanApplication", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LoanApp.Domain.Customers.Customer", b =>
+                {
+                    b.Navigation("Application");
                 });
 #pragma warning restore 612, 618
         }
