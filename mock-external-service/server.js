@@ -4,7 +4,7 @@
 //   POST /customers              create (idempotent on customer.id, so a retried create never duplicates)
 //   PUT  /customers/:id          update
 //   GET  /customers              everything received so far (for the demo)
-//   POST /simulate-outage/:n     fail the next n create/update requests with 503 (to demo retries)
+//   POST /simulate-outage/:n     fail the next n create/update requests with 503 (to demo retries); 0 cancels
 import http from 'node:http';
 
 const PORT = Number(process.env.PORT ?? 4000);
@@ -47,8 +47,8 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'POST' && resource === 'simulate-outage') {
-    failuresLeft = Number(id) || 1;
-    log(`⚠ next ${failuresLeft} request(s) will fail with 503`);
+    failuresLeft = Math.max(0, Number(id) || 0); // 0 cancels a pending outage
+    log(failuresLeft ? `⚠ next ${failuresLeft} request(s) will fail with 503` : '✓ simulated outage cancelled');
     return send(res, 200, { failuresLeft });
   }
 
